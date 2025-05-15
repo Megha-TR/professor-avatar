@@ -22,17 +22,21 @@ async def generate(req: Request):
     text = data["text"]
 
     try:
-        subprocess.run([
+        result = subprocess.run([
             "tts",
             "--text", text,
-            "--model_name", "tts_models/multilingual/multi-dataset/your_tts",
-            "--speaker_wav", "output.wav",
-            "--out_path", "static/output.wav"
-        ], check=True)
-
-        return { "audio_url": "http://localhost:8000/static/output.wav" }
+            "--model_name", "tts_models/multilingual/multi-dataset/xtts_v2",
+            "--speaker_wav", "static/output.wav",
+            "--language_idx", "en",
+            "--out_path", "static/generated.wav"
+        ], check=True, capture_output=True, text=True)
+        return { "audio_url": "http://localhost:8002/static/generated.wav" }
 
     except subprocess.CalledProcessError as e:
         print("🔥 TTS ERROR:", e)
+        if e.stderr:
+            print("🔥 TTS STDERR:", e.stderr)
+        if e.stdout:
+            print("🔥 TTS STDOUT:", e.stdout)
         return { "error": "TTS generation failed" }
 

@@ -7,13 +7,13 @@ function App() {
 
   const handleGenerate = async () => {
     setLoading(true);
-    const res = await fetch("http://localhost:8000/generate", {
+    const res = await fetch("http://localhost:8002/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
     });
     const data = await res.json();
-    setVideoUrl(data.video_url);
+    setVideoUrl(data.audio_url);
     setLoading(false);
   };
 
